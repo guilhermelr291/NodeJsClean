@@ -13,4 +13,5 @@ describe('SignUp Controller', () => {
   };
   const httpResponse = sut.handle(httpRequest); //a funcao do controlador e controla a requisicão, validar o request e retornar um response valido.
   expect(httpResponse.statusCode).toBe(400);
+  expect(httpResponse.body).toEqual(new Error('Missing param: name')); //IMPORTANT toBe não pode ser usado para comparar 2 objetos, pois ele compara o ponteiro do objeto.
 });
