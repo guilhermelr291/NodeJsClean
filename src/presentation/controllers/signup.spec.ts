@@ -1,3 +1,4 @@
+import { MissingParamError } from '../errors/missing-param-error';
 import { SignUpController } from './signup';
 
 describe('SignUp Controller', () => {
@@ -13,7 +14,7 @@ describe('SignUp Controller', () => {
     };
     const httpResponse = sut.handle(httpRequest); //a funcao do controlador e controla a requisicão, validar o request e retornar um response valido.
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new Error('Missing param: name')); //IMPORTANT toBe não pode ser usado para comparar 2 objetos, pois ele compara o ponteiro do objeto.
+    expect(httpResponse.body).toEqual(new MissingParamError('name')); //IMPORTANT toBe não pode ser usado para comparar 2 objetos, pois ele compara o ponteiro do objeto.
   }); //podemos começar, primeiramente, testando as validações.
 
   test('Should return 400 if no email is provided', () => {
@@ -27,6 +28,6 @@ describe('SignUp Controller', () => {
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new Error('Missing param: email'));
+    expect(httpResponse.body).toEqual(new MissingParamError('email'));
   });
 });
