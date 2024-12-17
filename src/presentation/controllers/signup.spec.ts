@@ -1,10 +1,14 @@
 import { MissingParamError } from '../errors/missing-param-error';
 import { SignUpController } from './signup';
 
+const makeSut = (): SignUpController => {
+  return new SignUpController();
+};
+
 describe('SignUp Controller', () => {
   //geralmente, botamos na descrição o nome do componente que estamos testando.
   test('Should return 400 if no name is provided', () => {
-    const sut = new SignUpController(); //IMPORTANT começamos sempre com a instancia da classe que estamos testando. costumamos chamar esse instancia de 'sut'(system under test).
+    const sut = makeSut(); //IMPORTANT começamos sempre com a instancia da classe que estamos testando. costumamos chamar esse instancia de 'sut'(system under test).
     const httpRequest = {
       body: {
         email: 'any_email@mail.com',
@@ -18,7 +22,7 @@ describe('SignUp Controller', () => {
   }); //podemos começar, primeiramente, testando as validações.
 
   test('Should return 400 if no email is provided', () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -31,7 +35,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'));
   });
   test('Should return 400 if no password is provided', () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -44,7 +48,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'));
   });
   test('Should return 400 if no password confirmation is provided', () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
