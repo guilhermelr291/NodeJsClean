@@ -18,9 +18,9 @@ export class DbAddAccount implements AddAccount {
   }
   async add(accountData: AddAccountModel): Promise<AccountModel> {
     const hashedPassword = await this.encrypter.encrypt(accountData.password); //IMPORTANT vale lembrar que o accountData que recebemos no parametro nao ta com a senha criptografada. se passarmos para o repositorio, vai dar erro.
-    await this.addAccountRepository.add(
+    const account = await this.addAccountRepository.add(
       Object.assign({}, accountData, { password: hashedPassword })
     );
-    return new Promise(resolve => resolve(null));
+    return new Promise(resolve => resolve(account));
   }
 }
