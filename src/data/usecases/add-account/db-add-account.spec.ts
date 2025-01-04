@@ -1,10 +1,10 @@
 import { DbAddAccount } from './db-add-account';
-import { Encrypter } from './db-add-account-protocols';
-
-interface SutTypes {
-  sut: DbAddAccount;
-  encrypterStub: Encrypter;
-}
+import {
+  AccountModel,
+  AddAccountModel,
+  AddAccountRepository,
+  Encrypter,
+} from './db-add-account-protocols';
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
@@ -15,12 +15,33 @@ const makeEncrypter = (): Encrypter => {
 
   return new EncrypterStub(); //temos que passar no construtor do dbAddAccount
 };
+const makeAddAccountRepository = (): AddAccountRepository => {
+  class addAccountRepositoryStub implements AddAccountRepository {
+    async add(accountData: AddAccountModel): Promise<AccountModel> {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email',
+        password: 'hashed_password',
+      };
+      return new Promise(resolve => resolve(fakeAccount));
+    }
+  }
 
+  return new addAccountRepositoryStub(); //temos que passar no construtor do dbAddAccount
+};
+
+interface SutTypes {
+  sut: DbAddAccount;
+  encrypterStub: Encrypter;
+  addAccountRepositoryStub: AddAccountRepository;
+}
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypter();
-  const sut = new DbAddAccount(encrypterStub);
+  const addAccountRepositoryStub = makeAddAccountRepository();
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub);
 
-  return { sut, encrypterStub };
+  return { sut, encrypterStub, addAccountRepositoryStub };
 };
 
 describe('DbAddAccount Usecase', () => {
@@ -53,5 +74,22 @@ describe('DbAddAccount Usecase', () => {
     };
     const promise = sut.add(accountData); //temos que obter o retorno sem o await, pegarmos a promise e, a partir dela, esperarmos o reject.
     await expect(promise).rejects.toThrow(); //por que "perder tempo" criando um teste desse? Simplesmente, para caso alguém coloque um try catch no método, n corrermos o risco da exceção não ser lançada e não tratada pelo controller.
+  });
+
+  test('Should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
+    const accountData = {
+      //IMPORTANT lembrar que ja recebemos esses dados validados do nosso controller.
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password',
+    };
+    await sut.add(accountData);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_password',
+    });
   });
 });
