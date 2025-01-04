@@ -110,4 +110,23 @@ describe('DbAddAccount Usecase', () => {
     const promise = sut.add(accountData); //temos que obter o retorno sem o await, pegarmos a promise e, a partir dela, esperarmos o reject.
     await expect(promise).rejects.toThrow(); //por que "perder tempo" criando um teste desse? Simplesmente, para caso alguém coloque um try catch no método, n corrermos o risco da exceção não ser lançada e não tratada pelo controller.
   });
+
+  test('Should return an account on success', async () => {
+    const { sut } = makeSut();
+    //IMPORTANT Lembrete: caso de sucesso a gente não mocka! o default dos testes deve ser passar. mocks apenas para retornar erros ou valores que causem erros.
+    const accountData = {
+      //IMPORTANT lembrar que ja recebemos esses dados validados do nosso controller.
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password',
+    };
+    const account = await sut.add(accountData);
+    expect(account).toEqual({
+      //toEqual para comprar objetos. toBe da errado, pq compara o endereço de memória.
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_password',
+    });
+  });
 });
