@@ -7,11 +7,15 @@ jest.mock('bcrypt', () => ({
   },
 }));
 
+const salt = 12; //botando aqui para nao precisar retornar no makeSut
+const makeSut = (): BcryptAdapter => {
+  return new BcryptAdapter(salt);
+};
+
 describe('BcryptAdapter', () => {
   test('Should call bcrypt with correct values', async () => {
-    const salt = 12;
-    const sut = new BcryptAdapter(salt);
     const hashSpy = jest.spyOn(bcrypt, 'hash');
+    const sut = makeSut();
     await sut.encrypt('any_value'); //como estamos testando a integração aqui, não estamos preocupados com o retorno.
     expect(hashSpy).toHaveBeenCalledWith('any_value', salt);
   });
