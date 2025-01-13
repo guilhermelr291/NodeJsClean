@@ -13,6 +13,15 @@ describe('Account Mongo Repository', () => {
     await MongoHelper.disconnect();
   });
 
+  //quando estamos mexendo com testes de integração e banco de dados,
+  // é importante também, entre os testes, zerarmos as respectivas tabelas.
+  //para evitar que fique lixo e influencie nos outros testes
+
+  beforeEach(async () => {
+    const accountCollection = MongoHelper.getCollection('accounts');
+    await accountCollection.deleteMany({});
+  });
+
   test('Should return an account on success', async () => {
     const sut = makeSut();
     const account = await sut.add({
