@@ -18,7 +18,7 @@ describe('Account Mongo Repository', () => {
   //para evitar que fique lixo e influencie nos outros testes
 
   beforeEach(async () => {
-    const accountCollection = MongoHelper.getCollection('accounts');
+    const accountCollection = await MongoHelper.getCollection('accounts');
     await accountCollection.deleteMany({});
   });
 
