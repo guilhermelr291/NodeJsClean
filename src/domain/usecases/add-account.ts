@@ -1,9 +1,11 @@
+import { ObjectId } from 'mongodb';
 import { AccountModel } from '../models/account';
 
 export interface AddAccountModel {
   name: string;
   email: string;
   password: string;
+  _id?: ObjectId;
 }
 
 export interface AddAccount {

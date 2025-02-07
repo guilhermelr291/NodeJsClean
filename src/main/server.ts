@@ -1,6 +1,7 @@
 import { MongoHelper } from '../infra/db/mongodb/helpers/mongo-helper';
 import env from './config/env';
 
+console.log('mongo: ', env.mongoUrl);
 MongoHelper.connect(env.mongoUrl)
   .then(async () => {
     //melhor usar o .then do q fazer um função async. assim, garantimos

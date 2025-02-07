@@ -1,0 +1,17 @@
+import { Controller, HttpRequest } from '../../presentation/protocols';
+import { Request, Response } from 'express';
+
+//importante termos a interface aqui.
+//poderá receber qualquer controller que implemente essa interface Controller.
+export const adaptRoute = (controller: Controller) => {
+  return async (req: Request, res: Response) => {
+    const httpRequest: HttpRequest = {
+      body: req.body, //no nosso controller estamos pegando so o body,
+      //então mapeamos só ele aqui.
+    };
+    const httpResponse = await controller.handle(httpRequest);
+    res.status(httpResponse.statusCode).json(httpResponse.body);
+  }; //vms executar a função no router,
+  // q vai retornar exatamente isso, q o express espera.
+  //async pq nosso handle do controller é async
+};
