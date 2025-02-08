@@ -1,3 +1,4 @@
+import { LogErrorRepository } from '../../data/protocols/log-error-repository';
 import {
   Controller,
   HttpRequest,
@@ -13,14 +14,17 @@ import {
 //como o decorator tem comportamento, vale a pena criar um teste pra ele, diferente da factory q n tem.
 export class LogControllerDecorator implements Controller {
   private readonly controller: Controller;
-  constructor(controller: Controller) {
+  private readonly logErrorRepository: LogErrorRepository;
+  constructor(controller: Controller, logErrorRepository: LogErrorRepository) {
     this.controller = controller;
+    this.logErrorRepository = logErrorRepository;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const httpResponse = await this.controller.handle(httpRequest); //nosso controller retorna um ok() um ou ServerError(). Se retornar um serverError, podemos fazer um log aqui mesmo, preservando o comportamento da classe original.
+
     if (httpResponse.statusCode === 500) {
-      //log
+      await this.logErrorRepository.log(httpResponse.body.stack);
     }
     return httpResponse;
   }
