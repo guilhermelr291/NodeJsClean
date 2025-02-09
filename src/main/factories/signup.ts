@@ -9,6 +9,7 @@ import {
   HttpResponse,
 } from '../../presentation/protocols';
 import { LogControllerDecorator } from '../decorators/log';
+import { LogMongoRepository } from '../../infra/db/mongodb/log-repository/log';
 
 //agora, em vez de retornamos um signUpController, podemos retornar um LogControllerDecorator, pois eles tem a mesma implementação. Ambos implementam Controller
 //agora, basta invocarmos o handle do controller recebido no LogControllerDecorator.
@@ -28,7 +29,9 @@ export const makeSignUpController = (): Controller => {
     dbAddAccount
   );
 
-  return new LogControllerDecorator(signUpController);
+  const logMongoRepository = new LogMongoRepository();
+
+  return new LogControllerDecorator(signUpController, logMongoRepository);
   //estamos respeitando o single principle do solid, por isso tantos
   //  componentes para montar o controller
 };
