@@ -1,11 +1,9 @@
-import { resolve } from 'path';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
 } from '../../presentation/protocols';
 import { LogControllerDecorator } from './log';
-import { ServerError } from '../../presentation/errors';
 import { ok, serverError } from '../../presentation/helpers/http-helper';
 import { LogErrorRepository } from '../../data/protocols/log-error-repository';
 import { AccountModel } from '../../domain/models/account';
@@ -14,7 +12,7 @@ import { AccountModel } from '../../domain/models/account';
 
 const makeLogErrorRepository = (): LogErrorRepository => {
   class LogErrorRepositoryStub implements LogErrorRepository {
-    log(stack: string): Promise<void> {
+    logError(stack: string): Promise<void> {
       //Promise<void> pq n retorna nd, mas, como lida com o bd, é async.
 
       return new Promise(resolve => resolve());
@@ -94,7 +92,7 @@ describe('LogControllerDecorator', () => {
   test('Should call LogErrorRepository with correct error if controller returns a serverError', async () => {
     const { sut, controllerStub, LogErrorRepositoryStub } = makeSut();
 
-    const logSpy = jest.spyOn(LogErrorRepositoryStub, 'log');
+    const logSpy = jest.spyOn(LogErrorRepositoryStub, 'logError');
     jest
       .spyOn(controllerStub, 'handle')
       .mockReturnValueOnce(
