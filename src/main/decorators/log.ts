@@ -24,7 +24,7 @@ export class LogControllerDecorator implements Controller {
     const httpResponse = await this.controller.handle(httpRequest); //nosso controller retorna um ok() um ou ServerError(). Se retornar um serverError, podemos fazer um log aqui mesmo, preservando o comportamento da classe original.
 
     if (httpResponse.statusCode === 500) {
-      await this.logErrorRepository.log(httpResponse.body.stack);
+      await this.logErrorRepository.logError(httpResponse.body.stack);
     }
     return httpResponse;
   }
