@@ -10,7 +10,15 @@ export const adaptRoute = (controller: Controller) => {
       //então mapeamos só ele aqui.
     };
     const httpResponse = await controller.handle(httpRequest);
-    res.status(httpResponse.statusCode).json(httpResponse.body);
+
+    //estamos fazendo esse if pois na resposta está indo com o nome do error, em vez da mensagem, ja que mandamos o erro no body.
+    if (httpResponse.statusCode === 200) {
+      res.status(httpResponse.statusCode).json(httpResponse.body);
+    } else {
+      res
+        .status(httpResponse.statusCode)
+        .json({ error: httpResponse.body.message }); //message do Error. ServerError, por ex.
+    }
   }; //vms executar a função no router,
   // q vai retornar exatamente isso, q o express espera.
   //async pq nosso handle do controller é async
