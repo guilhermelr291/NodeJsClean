@@ -19,6 +19,13 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub();
 };
 
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    email: 'any_email@mail.com',
+    password: 'any_password',
+  },
+});
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
   const sut = new LoginController(emailValidatorStub);
@@ -57,14 +64,7 @@ describe('Login Controller', () => {
     const { sut, emailValidatorStub } = makeSut();
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid');
 
-    const httpRequest: HttpRequest = {
-      body: {
-        email: 'any_email@mail.com',
-        password: 'any_password',
-      },
-    };
-
-    await sut.handle(httpRequest);
+    await sut.handle(makeFakeRequest());
 
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com');
   });
@@ -74,14 +74,7 @@ describe('Login Controller', () => {
 
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false); //o Once define um valor para a proxima chamada. o mockReturnValue define um valor para todas as chamadas
 
-    const httpRequest: HttpRequest = {
-      body: {
-        email: 'any_email@mail.com',
-        password: 'any_password',
-      },
-    };
-
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
   });
