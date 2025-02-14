@@ -1,5 +1,9 @@
-import { InvalidParamError, MissingParamError } from '../../errors';
-import { badRequest } from '../../helpers/http-helper';
+import {
+  InvalidParamError,
+  MissingParamError,
+  ServerError,
+} from '../../errors';
+import { badRequest, serverError } from '../../helpers/http-helper';
 import { HttpRequest } from '../../protocols';
 import { EmailValidator } from '../signup/signup-protocols';
 import { LoginController } from './login';
@@ -77,5 +81,18 @@ describe('Login Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
+  });
+
+  test('Should return 500 is EmailValidator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    //mockReturnedValue nao da, pq retorna um bool e n lança exceção.
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(serverError(new ServerError('')));
   });
 });
