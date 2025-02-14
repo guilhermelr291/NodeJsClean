@@ -1,4 +1,3 @@
-import { Authentication } from '../../../domain/usecases/authentication';
 import {
   InvalidParamError,
   MissingParamError,
@@ -9,8 +8,12 @@ import {
   serverError,
   unauthorized,
 } from '../../helpers/http-helper';
-import { HttpRequest } from '../../protocols';
-import { EmailValidator } from '../signup/signup-protocols';
+
+import {
+  EmailValidator,
+  HttpRequest,
+  Authentication,
+} from '../signup/signup-protocols';
 import { LoginController } from './login';
 
 const makeAuthentication = (): Authentication => {
