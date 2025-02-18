@@ -6,7 +6,7 @@ import {
   AddAccountModel,
 } from '../../../domain/usecases/add-account';
 import { AccountModel } from '../../../domain/models/account';
-import { badRequest, ok, serverError } from '../../helpers/http-helper';
+import { badRequest, ok, serverError } from '../../helpers/http/http-helper';
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
