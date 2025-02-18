@@ -1,11 +1,11 @@
-import { DbAddAccount } from '../../data/usecases/add-account/db-add-account';
-import { SignUpController } from '../../presentation/controllers/signup/signup';
+import { DbAddAccount } from '../../../data/usecases/add-account/db-add-account';
+import { SignUpController } from '../../../presentation/controllers/signup/signup';
 
-import { BcryptAdapter } from '../../infra/criptography/bcrypt-adapter';
-import { AccountMongoRepository } from '../../infra/db/mongodb/account-repository/account';
-import { Controller } from '../../presentation/protocols';
-import { LogControllerDecorator } from '../decorators/log';
-import { LogMongoRepository } from '../../infra/db/mongodb/log-repository/log';
+import { BcryptAdapter } from '../../../infra/criptography/bcrypt-adapter';
+import { AccountMongoRepository } from '../../../infra/db/mongodb/account-repository/account';
+import { Controller } from '../../../presentation/protocols';
+import { LogControllerDecorator } from '../../decorators/log';
+import { LogMongoRepository } from '../../../infra/db/mongodb/log-repository/log';
 import { makeSignUpValidation } from './signup-validation';
 
 //agora, em vez de retornamos um signUpController, podemos retornar um LogControllerDecorator, pois eles tem a mesma implementação. Ambos implementam Controller
