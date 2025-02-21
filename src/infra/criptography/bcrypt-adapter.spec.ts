@@ -16,13 +16,13 @@ describe('BcryptAdapter', () => {
   test('Should call bcrypt with correct values', async () => {
     const hashSpy = jest.spyOn(bcrypt, 'hash');
     const sut = makeSut();
-    await sut.encrypt('any_value'); //como estamos testando a integração aqui, não estamos preocupados com o retorno.
+    await sut.hash('any_value'); //como estamos testando a integração aqui, não estamos preocupados com o retorno.
     expect(hashSpy).toHaveBeenCalledWith('any_value', salt);
   });
 
   test('Should return a hash on success', async () => {
     const sut = makeSut();
-    const hash = await sut.encrypt('any_value'); //o certo aq é mockarmos o bcrypt. nao nos interessa saber como o bcrypt gera a hash. o que nos interessa é que o valor retornado pelo bcrypt seja igual ao retorno da função encrypt.
+    const hash = await sut.hash('any_value'); //o certo aq é mockarmos o bcrypt. nao nos interessa saber como o bcrypt gera a hash. o que nos interessa é que o valor retornado pelo bcrypt seja igual ao retorno da função encrypt.
     expect(hash).toBe('hash');
   });
 
@@ -32,7 +32,7 @@ describe('BcryptAdapter', () => {
       return Promise.reject(new Error());
     });
 
-    const promise = sut.encrypt('any_value'); //lembrar que quando formos testar uma exceção não podemos usar o await. temos que capturar a promise e analisa-la.
+    const promise = sut.hash('any_value'); //lembrar que quando formos testar uma exceção não podemos usar o await. temos que capturar a promise e analisa-la.
     await expect(promise).rejects.toThrow();
   });
 });
