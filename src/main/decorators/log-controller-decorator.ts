@@ -13,9 +13,10 @@ import {
 //agora, sempre que criarmos uma factory para um controller, em vez de retornar o controller, vamos retornar o decorator englobando esse controller.
 //como o decorator tem comportamento, vale a pena criar um teste pra ele, diferente da factory q n tem.
 export class LogControllerDecorator implements Controller {
-  private readonly controller: Controller;
-  private readonly logErrorRepository: LogErrorRepository;
-  constructor(controller: Controller, logErrorRepository: LogErrorRepository) {
+  constructor(
+    private readonly controller: Controller,
+    private readonly logErrorRepository: LogErrorRepository
+  ) {
     this.controller = controller;
     this.logErrorRepository = logErrorRepository;
   }

@@ -9,9 +9,10 @@ import { badRequest, serverError, ok } from '../../helpers/http/http-helper';
 import { AddAccount } from '../../../domain/usecases/add-account';
 
 export class SignUpController implements Controller {
-  private readonly addAccount: AddAccount;
-  private readonly validation: Validation;
-  constructor(addAccount: AddAccount, validation: Validation) {
+  constructor(
+    private readonly addAccount: AddAccount,
+    private readonly validation: Validation
+  ) {
     this.addAccount = addAccount;
     this.validation = validation;
   }

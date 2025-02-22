@@ -3,8 +3,7 @@ import { Hasher } from '../../../data/protocols/cryptography/hasher';
 import bcrypt from 'bcrypt';
 
 export class BcryptAdapter implements Hasher, HashComparer {
-  private readonly salt: number;
-  constructor(salt: number) {
+  constructor(private readonly salt: number) {
     this.salt = salt;
   }
   async hash(value: string): Promise<string> {
