@@ -1,9 +1,11 @@
+import { Collection } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { AccountMongoRepository } from './account';
 
 const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository();
 };
+let accountCollection: Collection;
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
@@ -18,11 +20,11 @@ describe('Account Mongo Repository', () => {
   //para evitar que fique lixo e influencie nos outros testes
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts');
+    accountCollection = await MongoHelper.getCollection('accounts');
     await accountCollection.deleteMany({});
   });
 
-  test('Should return an account on success', async () => {
+  test('Should return an account on add success', async () => {
     const sut = makeSut();
     const account = await sut.add({
       name: 'any_name',
@@ -30,6 +32,20 @@ describe('Account Mongo Repository', () => {
       password: 'any_password',
     });
     expect(account).toBeTruthy(); //garante que nao é nulo, undefined, etc..
+    expect(account.id).toBeTruthy();
+    expect(account.name).toBe('any_name');
+    expect(account.email).toBe('any_email@mail.com');
+    expect(account.password).toBe('any_password');
+  });
+  test('Should return an account on loadByEmail success', async () => {
+    const sut = makeSut();
+    await accountCollection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    });
+    const account = await sut.loadByEmail('any_email@mail.com'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
+    expect(account).toBeTruthy();
     expect(account.id).toBeTruthy();
     expect(account.name).toBe('any_name');
     expect(account.email).toBe('any_email@mail.com');
