@@ -1,5 +1,5 @@
-import { Controller, HttpRequest } from '../../presentation/protocols';
 import { Request, Response } from 'express';
+import { Controller, HttpRequest } from '../../../presentation/protocols';
 
 //importante termos a interface aqui.
 //poderá receber qualquer controller que implemente essa interface Controller.
