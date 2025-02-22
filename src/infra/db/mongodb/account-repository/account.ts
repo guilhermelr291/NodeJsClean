@@ -14,12 +14,6 @@ export class AccountMongoRepository implements AddAccountRepository {
       ...accountData,
     };
 
-    //TODO: Ver pq esta retornando com campo _ID
-
-    console.log('account: ', account);
-    console.log('id: ', result.insertedId.toHexString());
-    console.log('account data: ', accountData);
-
     return account; //conforme dito anteriormente,nao vamos reconectar o MongoHelper no bd. vamos criar um método para aproveitar a conexão já ativa e pegar apenas a collection que queremos testar.
   }
 }
