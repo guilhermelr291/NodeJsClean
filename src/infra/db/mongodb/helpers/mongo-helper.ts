@@ -24,4 +24,10 @@ export const MongoHelper = {
     }
     return this.client.db().collection(name);
   },
+
+  map(data: any) {
+    const id = data._id.toHexString();
+    delete data._id;
+    return { id, ...data };
+  },
 };
