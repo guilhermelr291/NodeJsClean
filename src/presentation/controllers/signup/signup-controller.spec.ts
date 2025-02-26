@@ -25,7 +25,7 @@ const makeAuthentication = (): Authentication => {
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
-    validate(input: any): Error {
+    validate(input: any): Error | null {
       return null; //se n retornarmos erro nenhum, é sucesso. podemos usar NULL então.
     }
   }
@@ -108,7 +108,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(ok(makeFakeAccount()));
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }));
   });
 
   test('Should call Validation with correct value', async () => {

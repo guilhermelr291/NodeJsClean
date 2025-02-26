@@ -33,7 +33,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
-    validate(input: any): Error {
+    validate(input: any): Error | null {
       return null; //se n retornarmos erro nenhum, é sucesso. podemos usar NULL então.
     }
   }
