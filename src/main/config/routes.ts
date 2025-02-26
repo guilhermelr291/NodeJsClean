@@ -5,10 +5,9 @@ import { readdirSync } from 'fs';
 export default (app: Express): void => {
   const router = Router();
   app.use('/api', router);
-  //quando vamos usar o import fora do escopo global, temos que usar assim. import()
 
   readdirSync(`${__dirname}/../routes`).map(async file => {
-    if (!file.includes('.test.')) {
+    if (!file.includes('.test.') && !file.includes('.map')) {
       (await import(`../routes/${file}`)).default(router);
     }
   });
