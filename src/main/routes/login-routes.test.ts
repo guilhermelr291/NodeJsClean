@@ -8,7 +8,7 @@ import { hash } from 'bcrypt';
 let accountCollection: Collection;
 describe('Login Routes', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL);
+    await MongoHelper.connect(process.env.MONGO_URL!);
   });
   afterAll(async () => {
     await MongoHelper.disconnect();
