@@ -7,6 +7,9 @@ import { Controller } from '../../../presentation/protocols';
 import { LogControllerDecorator } from '../../decorators/log-controller-decorator';
 import { LogMongoRepository } from '../../../infra/db/mongodb/log/log-mongo-repository';
 import { makeSignUpValidation } from './signup-validation-factory';
+import { DbAuthentication } from '../../../data/usecases/authentication/db-authentication';
+import { JwtAdapter } from '../../../infra/criptography/jwt-adapter/jwt-adapter';
+import env from '../../config/env';
 
 //agora, em vez de retornamos um signUpController, podemos retornar um LogControllerDecorator, pois eles tem a mesma implementação. Ambos implementam Controller
 //agora, basta invocarmos o handle do controller recebido no LogControllerDecorator.
@@ -19,11 +22,20 @@ export const makeSignUpController = (): Controller => {
   const bcryptAdapter = new BcryptAdapter(salt);
   const accountMongoRepository = new AccountMongoRepository();
   const dbAddAccount = new DbAddAccount(bcryptAdapter, accountMongoRepository);
+  const encrypter = new JwtAdapter(env.jwtSecret);
+
+  const authentication = new DbAuthentication(
+    accountMongoRepository,
+    bcryptAdapter,
+    encrypter,
+    accountMongoRepository
+  );
 
   //return new SignUpController(emailValidatorAdapter, dbAddAccount);
   const signUpController = new SignUpController(
     dbAddAccount,
-    makeSignUpValidation()
+    makeSignUpValidation(),
+    authentication
   );
 
   const logMongoRepository = new LogMongoRepository();
