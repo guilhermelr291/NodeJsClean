@@ -4,3 +4,4 @@ husky
 coverage
 .vscode 
 data
+!src/data
