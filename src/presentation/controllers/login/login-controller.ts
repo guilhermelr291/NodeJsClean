@@ -40,6 +40,7 @@ export class LoginController implements Controller {
 
       return ok({ accessToken });
     } catch (error) {
+      console.error(error);
       return serverError(new ServerError(error.stack));
     }
   }
