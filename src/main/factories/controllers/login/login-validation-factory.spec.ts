@@ -1,14 +1,14 @@
+import { Validation } from '../../../../presentation/protocols/validation';
 import {
   EmailValidation,
   RequiredFieldValidation,
   ValidationComposite,
-} from '../../../../presentation/helpers/validators';
+} from '../../../../validation/validators';
+import { EmailValidator } from '../../../../validation/validators/protocols/email-validator';
 
-import { Validation } from '../../../../presentation/protocols/validation';
-import { EmailValidator } from '../../../../presentation/protocols/email-validator';
 import { makeLoginValidation } from './login-validation-factory';
 
-jest.mock('../../../../presentation/helpers/validators/validation-composite');
+jest.mock('../../../../validation/validators/validation-composite');
 //ta mockado. em qualquer lugar q for chamado teremos acesso.
 
 const makeEmailValidator = (): EmailValidator => {
