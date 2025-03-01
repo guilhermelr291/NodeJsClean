@@ -11,9 +11,9 @@ import {
   serverError,
   ok,
   forbidden,
-} from '../../helpers/http/http-helper';
-import { AddAccount } from '../../../domain/usecases/add-account';
-import { EmailInUseError } from '../../errors';
+} from '../../../helpers/http/http-helper';
+import { AddAccount } from '../../../../domain/usecases/add-account';
+import { EmailInUseError } from '../../../errors';
 
 export class SignUpController implements Controller {
   constructor(

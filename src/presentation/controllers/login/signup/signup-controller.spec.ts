@@ -1,4 +1,8 @@
-import { EmailInUseError, MissingParamError, ServerError } from '../../errors';
+import {
+  EmailInUseError,
+  MissingParamError,
+  ServerError,
+} from '../../../errors';
 import { SignUpController } from './signup-controller';
 import {
   Authentication,
@@ -9,14 +13,14 @@ import {
 import {
   AddAccount,
   AddAccountModel,
-} from '../../../domain/usecases/add-account';
-import { AccountModel } from '../../../domain/models/account';
+} from '../../../../domain/usecases/add-account';
+import { AccountModel } from '../../../../domain/models/account';
 import {
   badRequest,
   forbidden,
   ok,
   serverError,
-} from '../../helpers/http/http-helper';
+} from '../../../helpers/http/http-helper';
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
