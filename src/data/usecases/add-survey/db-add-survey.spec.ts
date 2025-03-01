@@ -11,20 +11,33 @@ const makeFakeSurveyData = (): AddSurveyModel => ({
   ],
 });
 
+interface SutTypes {
+  sut: DbAddSurvey;
+  addSurveyRepositoryStub: AddSurveyRepository;
+}
+
+const makeAddSurveyRepository = (): AddSurveyRepository => {
+  class AddSurveyRepositoryStub implements AddSurveyRepository {
+    async add(surveyData: AddSurveyModel): Promise<void> {
+      return new Promise(resolve => resolve());
+    }
+  }
+  return new AddSurveyRepositoryStub();
+};
+
+const makeSut = (): SutTypes => {
+  const addSurveyRepositoryStub = makeAddSurveyRepository();
+  const sut = new DbAddSurvey(addSurveyRepositoryStub);
+
+  return { sut, addSurveyRepositoryStub };
+};
+
 describe('DbAddSurvey', () => {
   test('Should call AddSurveyRepository with correct values', async () => {
-    class AddSurveyRepositoryStub implements AddSurveyRepository {
-      async add(surveyData: AddSurveyModel): Promise<void> {
-        return new Promise(resolve => resolve());
-      }
-    }
-    const addSurveyRepositoryStub = new AddSurveyRepositoryStub();
-    const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add');
-    const sut = new DbAddSurvey(addSurveyRepositoryStub);
-
+    const { sut, addSurveyRepositoryStub } = makeSut();
     const surveyData = makeFakeSurveyData();
+    const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add');
     await sut.add(surveyData);
-
     expect(addSpy).toHaveBeenCalledWith(surveyData);
   });
 });
