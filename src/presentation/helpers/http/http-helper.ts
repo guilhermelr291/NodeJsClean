@@ -1,10 +1,14 @@
-import { ServerError, UnauthorizedError } from '../../errors';
+import {
+  MissingParamError,
+  ServerError,
+  UnauthorizedError,
+} from '../../errors';
 
 import { HttpResponse } from '../../protocols/http';
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
-  body: error,
+  body: error instanceof MissingParamError ? error.message : error,
 });
 
 export const forbidden = (error: Error): HttpResponse => ({
