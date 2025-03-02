@@ -12,7 +12,7 @@ export const adaptRoute = (controller: Controller) => {
     const httpResponse = await controller.handle(httpRequest);
 
     //estamos fazendo esse if pois na resposta está indo com o nome do error, em vez da mensagem, ja que mandamos o erro no body.
-    if (httpResponse.statusCode === 200) {
+    if (httpResponse.statusCode >= 200 || httpResponse.statusCode <= 299) {
       res.status(httpResponse.statusCode).json(httpResponse.body);
     } else {
       res
