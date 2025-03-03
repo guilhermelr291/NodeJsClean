@@ -24,54 +24,63 @@ describe('Account Mongo Repository', () => {
     await accountCollection.deleteMany({});
   });
 
-  test('Should return an account on add success', async () => {
-    const sut = makeSut();
-    const account = await sut.add({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password',
+  describe('add', () => {
+    test('Should return an account on add success', async () => {
+      const sut = makeSut();
+      const account = await sut.add({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      });
+      expect(account).toBeTruthy(); //garante que nao é nulo, undefined, etc..
+      expect(account.id).toBeTruthy();
+      expect(account.name).toBe('any_name');
+      expect(account.email).toBe('any_email@mail.com');
+      expect(account.password).toBe('any_password');
     });
-    expect(account).toBeTruthy(); //garante que nao é nulo, undefined, etc..
-    expect(account.id).toBeTruthy();
-    expect(account.name).toBe('any_name');
-    expect(account.email).toBe('any_email@mail.com');
-    expect(account.password).toBe('any_password');
-  });
-  test('Should return an account on loadByEmail success', async () => {
-    const sut = makeSut();
-    await accountCollection.insertOne({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password',
-    });
-    const account = await sut.loadByEmail('any_email@mail.com'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
-    expect(account).toBeTruthy();
-    expect(account.id).toBeTruthy();
-    expect(account.name).toBe('any_name');
-    expect(account.email).toBe('any_email@mail.com');
-    expect(account.password).toBe('any_password');
   });
 
-  test('Should return null if loadByEmail returns null', async () => {
-    const sut = makeSut();
-
-    const account = await sut.loadByEmail('any_email@mail.com');
-    expect(account).toBeNull();
-  });
-
-  test('Should update account accessToken on updateAccessToken success', async () => {
-    const sut = makeSut();
-    const result = await accountCollection.insertOne({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password',
+  describe('loadByEmail', () => {
+    test('Should return an account on loadByEmail success', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      });
+      const account = await sut.loadByEmail('any_email@mail.com'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
+      expect(account).toBeTruthy();
+      expect(account.id).toBeTruthy();
+      expect(account.name).toBe('any_name');
+      expect(account.email).toBe('any_email@mail.com');
+      expect(account.password).toBe('any_password');
     });
 
-    await sut.updateAccessToken(result.insertedId.toHexString(), 'any_token');
+    test('Should return null if loadByEmail returns null', async () => {
+      const sut = makeSut();
 
-    const account = await accountCollection.findOne({ _id: result.insertedId });
+      const account = await sut.loadByEmail('any_email@mail.com');
+      expect(account).toBeNull();
+    });
+  });
 
-    expect(account).toBeTruthy();
-    expect(account.accessToken).toBe('any_token');
+  describe('updateAccessToken', () => {
+    test('Should update account accessToken on updateAccessToken success', async () => {
+      const sut = makeSut();
+      const result = await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      });
+
+      await sut.updateAccessToken(result.insertedId.toHexString(), 'any_token');
+
+      const account = await accountCollection.findOne({
+        _id: result.insertedId,
+      });
+
+      expect(account).toBeTruthy();
+      expect(account.accessToken).toBe('any_token');
+    });
   });
 });
