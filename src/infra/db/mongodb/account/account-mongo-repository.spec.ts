@@ -83,4 +83,22 @@ describe('Account Mongo Repository', () => {
       expect(account.accessToken).toBe('any_token');
     });
   });
+
+  describe('loadByToken', () => {
+    test('Should return an account on loadByToken without role', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        accessToken: 'any_token',
+      });
+      const account = await sut.loadByToken('any_token'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
+      expect(account).toBeTruthy();
+      expect(account.id).toBeTruthy();
+      expect(account.name).toBe('any_name');
+      expect(account.email).toBe('any_email@mail.com');
+      expect(account.password).toBe('any_password');
+    });
+  });
 });

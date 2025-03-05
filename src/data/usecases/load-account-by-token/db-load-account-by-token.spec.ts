@@ -54,7 +54,7 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, decrypterStub } = makeSut();
 
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt');
-    await sut.load('any_token');
+    await sut.loadByToken('any_token');
 
     expect(decryptSpy).toHaveBeenCalledWith('any_token');
   });
@@ -63,7 +63,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 
     jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(null);
 
-    const account = await sut.load('any_token', 'any_role');
+    const account = await sut.loadByToken('any_token', 'any_role');
 
     expect(account).toBeNull();
   });
@@ -75,7 +75,7 @@ describe('DbLoadAccountByToken Usecase', () => {
       'loadByToken'
     );
 
-    await sut.load('any_token', 'any_role');
+    await sut.loadByToken('any_token', 'any_role');
 
     expect(loadByTokenSpy).toHaveBeenCalledWith('any_value', 'any_role');
   });
@@ -86,14 +86,14 @@ describe('DbLoadAccountByToken Usecase', () => {
       .spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
       .mockReturnValueOnce(new Promise(resolve => resolve(null)));
 
-    const account = await sut.load('any_token', 'any_role');
+    const account = await sut.loadByToken('any_token', 'any_role');
 
     expect(account).toBeNull();
   });
   test('Should return an account on success', async () => {
     const { sut } = makeSut();
 
-    const account = await sut.load('any_token', 'any_role');
+    const account = await sut.loadByToken('any_token', 'any_role');
 
     expect(account).toEqual(makeFakeAccount());
   });
@@ -104,7 +104,7 @@ describe('DbLoadAccountByToken Usecase', () => {
       throw new Error();
     });
 
-    expect(sut.load('any_token', 'any_role')).rejects.toThrow();
+    expect(sut.loadByToken('any_token', 'any_role')).rejects.toThrow();
   });
   test('Should throw if LoadAccountByTokenRepository throws', async () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut();
@@ -115,6 +115,6 @@ describe('DbLoadAccountByToken Usecase', () => {
         throw new Error();
       });
 
-    expect(sut.load('any_token', 'any_role')).rejects.toThrow();
+    expect(sut.loadByToken('any_token', 'any_role')).rejects.toThrow();
   });
 });
