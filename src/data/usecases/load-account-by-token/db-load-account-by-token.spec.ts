@@ -77,7 +77,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 
     await sut.loadByToken('any_token', 'any_role');
 
-    expect(loadByTokenSpy).toHaveBeenCalledWith('any_value', 'any_role');
+    expect(loadByTokenSpy).toHaveBeenCalledWith('any_token', 'any_role');
   });
   test('Should return null if LoadAccountByToken repository return null', async () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut();

@@ -100,16 +100,45 @@ describe('Account Mongo Repository', () => {
       expect(account.email).toBe('any_email@mail.com');
       expect(account.password).toBe('any_password');
     });
-    test('Should return an account on loadByToken with role', async () => {
+    test('Should return an account on loadByToken with admin role', async () => {
       const sut = makeSut();
       await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
         accessToken: 'any_token',
-        role: 'any_role',
+        role: 'admin',
       });
-      const account = await sut.loadByToken('any_token', 'any_role'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
+      const account = await sut.loadByToken('any_token', 'admin'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
+      expect(account).toBeTruthy();
+      expect(account.id).toBeTruthy();
+      expect(account.name).toBe('any_name');
+      expect(account.email).toBe('any_email@mail.com');
+      expect(account.password).toBe('any_password');
+    });
+
+    test('Should return null on loadByToken with invalid role', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        accessToken: 'any_token',
+      });
+      const account = await sut.loadByToken('any_token', 'admin'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
+      expect(account).toBeFalsy();
+    });
+
+    test('Should return an account on loadByToken if user is admin', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        accessToken: 'any_token',
+        role: 'admin',
+      });
+      const account = await sut.loadByToken('any_token'); //lembrar que não adianta mockarmos aqui. Precisamos realmente criar um user no banco antes de fazer esse teste, já que é um teste de integração com o mongodb.
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
       expect(account.name).toBe('any_name');
