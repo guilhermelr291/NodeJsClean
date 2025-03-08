@@ -64,4 +64,11 @@ describe('DbLoadSurveys', () => {
 
     expect(loadAllSpy).toHaveBeenCalled();
   });
+  test('Should return a list of surveys on success', async () => {
+    const { sut } = makeSut();
+
+    const surveys = await sut.load();
+
+    expect(surveys).toEqual(makeFakeSurveys());
+  });
 });
