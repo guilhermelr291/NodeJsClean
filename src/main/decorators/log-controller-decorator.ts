@@ -1,9 +1,9 @@
-import { LogErrorRepository } from '../../data/protocols/db/log/log-error-repository';
+import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
-} from '../../presentation/protocols';
+} from '@/presentation/protocols';
 
 //Aqui, vamos aplicar o decorator. O padrão se resume em pegar um objeto e criar um wrapper em volta dele.
 //Dessa forma, não estaremos acoplando o Logger a nenhum controller. Como nao é um use-case, não tem necessidade de acoplarmos.

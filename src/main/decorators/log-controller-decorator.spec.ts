@@ -2,11 +2,11 @@ import {
   Controller,
   HttpRequest,
   HttpResponse,
-} from '../../presentation/protocols';
+} from '@/presentation/protocols';
 import { LogControllerDecorator } from './log-controller-decorator';
-import { ok, serverError } from '../../presentation/helpers/http/http-helper';
-import { LogErrorRepository } from '../../data/protocols/db/log/log-error-repository';
-import { AccountModel } from '../../domain/models/account';
+import { ok, serverError } from '@/presentation/helpers/http/http-helper';
+import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository';
+import { AccountModel } from '@/domain/models/account';
 
 //como o LogControllerDecorator pode receber qualquer controller, vms criar um controller mockado aqui. um Stub
 

@@ -2,7 +2,7 @@ import {
   EmailInUseError,
   MissingParamError,
   ServerError,
-} from '../../../errors';
+} from '@/presentation/errors';
 import { SignUpController } from './signup-controller';
 import {
   Authentication,
@@ -10,17 +10,14 @@ import {
   HttpRequest,
   Validation,
 } from './signup-controller-protocols';
-import {
-  AddAccount,
-  AddAccountModel,
-} from '../../../../domain/usecases/add-account';
-import { AccountModel } from '../../../../domain/models/account';
+import { AddAccount, AddAccountModel } from '@/domain/usecases/add-account';
+import { AccountModel } from '@/domain/models/account';
 import {
   badRequest,
   forbidden,
   ok,
   serverError,
-} from '../../../helpers/http/http-helper';
+} from '@/presentation/helpers/http/http-helper';
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {

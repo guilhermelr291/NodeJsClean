@@ -1,12 +1,12 @@
-import { Validation } from '../../../../../presentation/protocols/validation';
+import { Validation } from '@/presentation/protocols/validation';
 import {
   RequiredFieldValidation,
   ValidationComposite,
-} from '../../../../../validation/validators';
+} from '@/validation/validators';
 
 import { makeAddSurveyValidation } from './add-survey-validation-factory';
 
-jest.mock('../../../../../validation/validators/validation-composite');
+jest.mock('@/validation/validators/validation-composite');
 //ta mockado. em qualquer lugar q for chamado teremos acesso.
 
 describe('AddSurveyValidation Factory', () => {

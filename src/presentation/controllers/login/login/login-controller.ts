@@ -1,8 +1,4 @@
-import {
-  InvalidParamError,
-  MissingParamError,
-  ServerError,
-} from '../../../errors';
+import { ServerError } from '@/presentation/errors';
 import {
   badRequest,
   ok,
