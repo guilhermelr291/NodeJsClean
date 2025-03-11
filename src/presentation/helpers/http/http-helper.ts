@@ -8,7 +8,7 @@ import { HttpResponse } from '@/presentation/protocols/http';
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
-  body: error instanceof MissingParamError ? error.message : error,
+  body: error,
 });
 
 export const forbidden = (error: Error): HttpResponse => ({
