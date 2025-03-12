@@ -1,7 +1,9 @@
 import { DbLoadAccountByToken } from './db-load-account-by-token';
-import { Decrypter } from '@/data/protocols/cryptography/decrypter';
-import { AccountModel } from '../add-account/db-add-account-protocols';
-import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository';
+import {
+  AccountModel,
+  Decrypter,
+  LoadAccountByTokenRepository,
+} from './db-load-account-by-token-protocols';
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
