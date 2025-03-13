@@ -68,4 +68,11 @@ describe('DbSaveSurveyResult Usecase', () => {
 
     expect(sut.save(makeFakeSurveyResultData())).rejects.toThrow();
   });
+
+  test('Should return a SurveyResult on success ', async () => {
+    const { sut } = makeSut();
+
+    const survey = await sut.save(makeFakeSurveyResultData());
+    expect(survey).toEqual(makeFakeSurveyResult());
+  });
 });
