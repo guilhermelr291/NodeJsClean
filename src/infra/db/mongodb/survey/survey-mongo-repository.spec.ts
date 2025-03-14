@@ -1,5 +1,5 @@
 describe('', () => {});
-import { Collection } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { SurveyMongoRepository } from './survey-mongo-repository';
 
@@ -117,11 +117,11 @@ describe('Account Mongo Repository', () => {
 
       expect(surveys).toBeTruthy();
     });
-    // test('Should load empty list', async () => {
-    //   const sut = makeSut();
-    //   const surveys = await sut.loadAll();
+    test('Should return null if finds no survey by id', async () => {
+      const sut = makeSut();
+      const survey = await sut.loadById(ObjectId.createFromTime(123));
 
-    //   expect(surveys.length).toBe(0);
-    // });
+      expect(survey).toBeNull();
+    });
   });
 });
