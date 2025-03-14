@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import {
   LoadSurveyById,
   LoadSurveyByIdRepository,
@@ -10,8 +11,8 @@ export class DbLoadSurveyById implements LoadSurveyById {
   ) {
     this.loadSurveyByIdRepository = loadSurveyByIdRepository;
   }
-  async loadById(id: string): Promise<SurveyModel> {
-    const survey = await this.loadSurveyByIdRepository.loadById(id);
+  async loadById(_id: ObjectId): Promise<SurveyModel> {
+    const survey = await this.loadSurveyByIdRepository.loadById(_id);
 
     return survey;
   }

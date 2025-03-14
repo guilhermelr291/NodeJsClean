@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { DbLoadSurveyById } from './db-load-survey-by-id';
 import {
   LoadSurveyByIdRepository,
@@ -19,7 +20,7 @@ const makeFakeSurvey = (): SurveyModel => ({
 
 const makeLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
   class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
-    async loadById(id: string): Promise<SurveyModel> {
+    async loadById(_id: ObjectId): Promise<SurveyModel> {
       return new Promise(resolve => resolve(makeFakeSurvey()));
     }
   }
@@ -39,6 +40,8 @@ const makeSut = (): SutTypes => {
   return { sut, loadSurveyByIdRepositoryStub };
 };
 
+const FAKE_ID = 123;
+
 describe('DbLoadSurveys', () => {
   beforeAll(() => {
     MockDate.set(new Date());
@@ -53,15 +56,15 @@ describe('DbLoadSurveys', () => {
 
     const loadByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById');
 
-    await sut.loadById('any_id');
+    await sut.loadById(ObjectId.createFromTime(FAKE_ID));
 
-    expect(loadByIdSpy).toHaveBeenCalledWith('any_id');
+    expect(loadByIdSpy).toHaveBeenCalledWith(ObjectId.createFromTime(FAKE_ID));
   });
 
   test('Should return a survey on success', async () => {
     const { sut } = makeSut();
 
-    const survey = await sut.loadById('any_id');
+    const survey = await sut.loadById(ObjectId.createFromTime(FAKE_ID));
 
     expect(survey).toEqual(makeFakeSurvey());
   });
@@ -75,6 +78,6 @@ describe('DbLoadSurveys', () => {
         throw new Error();
       });
 
-    expect(sut.loadById('any_id')).rejects.toThrow();
+    expect(sut.loadById(ObjectId.createFromTime(FAKE_ID))).rejects.toThrow();
   });
 });
