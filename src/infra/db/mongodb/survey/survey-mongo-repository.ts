@@ -1,13 +1,13 @@
 import {
   AddSurveyModel,
   AddSurveyRepository,
-} from '@/data/usecases/add-survey/db-add-survey-protocols';
+} from '@/data/usecases/survey/add-survey/db-add-survey-protocols';
 import {
   LoadSurveysRepository,
   SurveyModel,
-} from '@/data/usecases/load-surveys/db-load-surveys-protocols';
+} from '@/data/usecases/survey/load-surveys/db-load-surveys-protocols';
 import { MongoHelper } from '../helpers/mongo-helper';
-import { LoadSurveyById } from '@/domain/usecases/load-survey-by-id';
+import { LoadSurveyById } from '@/domain/usecases/survey/load-survey-by-id';
 import { ObjectId } from 'mongodb';
 
 export class SurveyMongoRepository

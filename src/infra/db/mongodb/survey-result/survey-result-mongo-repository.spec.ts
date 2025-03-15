@@ -102,6 +102,7 @@ describe('Survey Mongo Repository', () => {
       });
 
       expect(res.id).toBe(surveyResult.id);
+
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.id).toBeTruthy();
       expect(surveyResult.answer).toBe(survey.answers[1].answer);

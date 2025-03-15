@@ -12,7 +12,7 @@ import {
   ok,
   forbidden,
 } from '../../../helpers/http/http-helper';
-import { AddAccount } from '@/domain/usecases/add-account';
+import { AddAccount } from '@/domain/usecases/account/add-account';
 import { EmailInUseError } from '@/presentation/errors';
 
 export class SignUpController implements Controller {

@@ -1,10 +1,11 @@
 import { SurveyResultModel } from '@/domain/models/survey-result';
+
+import { MongoHelper } from '../helpers/mongo-helper';
+import { ObjectId } from 'mongodb';
 import {
   SaveSurveyResult,
   SaveSurveyResultModel,
-} from '@/domain/usecases/save-survey-result';
-import { MongoHelper } from '../helpers/mongo-helper';
-import { ObjectId } from 'mongodb';
+} from '@/domain/usecases/survey-result/save-survey-result';
 
 export class SurveyResultMongoRepository implements SaveSurveyResult {
   async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {

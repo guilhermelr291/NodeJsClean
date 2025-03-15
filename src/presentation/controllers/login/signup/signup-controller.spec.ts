@@ -10,7 +10,10 @@ import {
   HttpRequest,
   Validation,
 } from './signup-controller-protocols';
-import { AddAccount, AddAccountModel } from '@/domain/usecases/add-account';
+import {
+  AddAccount,
+  AddAccountModel,
+} from '@/domain/usecases/account/add-account';
 import { AccountModel } from '@/domain/models/account';
 import {
   badRequest,
