@@ -10,6 +10,7 @@ import {
 import { SurveyModel } from '@/domain/models/survey';
 import { ObjectId } from 'mongodb';
 import { forbidden } from '@/presentation/helpers/http/http-helper';
+import { InvalidParamError } from '@/presentation/errors';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   params: { surveyId: 'any_survey_id' },
@@ -94,5 +95,17 @@ describe('SaveSurveyResult Controller', () => {
     await sut.handle(httpRequest);
 
     expect(loadByIdSpy).toHaveBeenCalledWith(httpRequest.params.surveyId);
+  });
+
+  test('Should return 403 if LoadSurveyById returns null', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+
+    jest
+      .spyOn(loadSurveyByIdStub, 'loadById')
+      .mockReturnValueOnce(new Promise(resolve => resolve(null)));
+
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
+
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 });
