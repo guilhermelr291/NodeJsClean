@@ -18,17 +18,16 @@ import { InvalidParamError } from '@/presentation/errors';
 const makeFakeHttpRequest = (): HttpRequest => ({
   params: { surveyId: 'any_survey_id' },
   body: {
-    surveyId: 'any_survey_id',
-    accountId: 'any_account_id',
     answer: 'any_answer',
     date: new Date(),
   },
+  accountId: 'any_account_id',
 });
 const makeFakeSurveyResult = (): SurveyResultModel => ({
-  id: 'any_id',
-  accountId: 'any_account_id',
-  surveyId: 'any_survey_id',
-  answer: 'any_answer',
+  id: 'valid_id',
+  accountId: 'valid_account_id',
+  surveyId: 'valid_survey_id',
+  answer: 'valid_answer',
   date: new Date(),
 });
 
@@ -122,5 +121,18 @@ describe('SaveSurveyResult Controller', () => {
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test('Should return 403 if an invalid answer is provided', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle({
+      params: { surveyId: 'any_survey_id' },
+      body: {
+        answer: 'wrong_answer',
+      },
+    });
+
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('answer')));
   });
 });
