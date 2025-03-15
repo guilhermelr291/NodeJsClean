@@ -3,6 +3,7 @@ import { MongoHelper } from '../helpers/mongo-helper';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyModel } from '@/domain/models/survey';
 import { AccountModel } from '@/domain/models/account';
+import e from 'express';
 
 const makeSut = (): SurveyResultMongoRepository => {
   return new SurveyResultMongoRepository();
@@ -68,8 +69,6 @@ describe('Survey Mongo Repository', () => {
       const survey = await makeSurvey();
 
       const account = await makeAccount();
-      console.log('meu survey: ', survey);
-      console.log('meu account: ', account);
       const sut = makeSut();
       const surveyResult = await sut.save({
         surveyId: survey.id,
@@ -81,6 +80,31 @@ describe('Survey Mongo Repository', () => {
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.id).toBeTruthy();
       expect(surveyResult.answer).toBe(survey.answers[0].answer);
+    });
+    test('Should update a survey result if it already exists ', async () => {
+      const survey = await makeSurvey();
+
+      const account = await makeAccount();
+      const sut = makeSut();
+
+      const res = await sut.save({
+        surveyId: survey.id,
+        accountId: account.id,
+        answer: survey.answers[0].answer,
+        date: new Date(),
+      });
+
+      const surveyResult = await sut.save({
+        surveyId: survey.id,
+        accountId: account.id,
+        answer: survey.answers[1].answer,
+        date: new Date(),
+      });
+
+      expect(res.id).toBe(surveyResult.id);
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.id).toBeTruthy();
+      expect(surveyResult.answer).toBe(survey.answers[1].answer);
     });
   });
 });
