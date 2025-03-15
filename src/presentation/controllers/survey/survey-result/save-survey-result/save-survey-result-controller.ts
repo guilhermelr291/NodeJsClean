@@ -1,4 +1,7 @@
-import { forbidden } from '@/presentation/helpers/http/http-helper';
+import {
+  forbidden,
+  serverError,
+} from '@/presentation/helpers/http/http-helper';
 import {
   Controller,
   HttpRequest,
@@ -18,13 +21,17 @@ export class SaveSurveyResultController implements Controller {
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const survey = await this.loadSurveyById.loadById(
-      httpRequest.params.surveyId
-    );
+    try {
+      const survey = await this.loadSurveyById.loadById(
+        httpRequest.params.surveyId
+      );
 
-    if (!survey) return forbidden(new InvalidParamError('surveyId'));
+      if (!survey) return forbidden(new InvalidParamError('surveyId'));
 
-    await this.saveSurveyResult.save(httpRequest.body);
-    return null;
+      await this.saveSurveyResult.save(httpRequest.body);
+      return null;
+    } catch (error) {
+      return serverError(error);
+    }
   }
 }
