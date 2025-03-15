@@ -1,5 +1,6 @@
 import {
   forbidden,
+  ok,
   serverError,
 } from '@/presentation/helpers/http/http-helper';
 import {
@@ -25,6 +26,7 @@ export class SaveSurveyResultController implements Controller {
       const { surveyId } = httpRequest.params;
       const { answer } = httpRequest.body;
       const { accountId } = httpRequest;
+
       const survey = await this.loadSurveyById.loadById(surveyId);
 
       if (survey) {
@@ -35,13 +37,13 @@ export class SaveSurveyResultController implements Controller {
         return forbidden(new InvalidParamError('surveyId'));
       }
 
-      await this.saveSurveyResult.save({
-        accountId: httpRequest.accountId,
+      const surveyResult = await this.saveSurveyResult.save({
+        accountId,
         answer,
         surveyId,
         date: new Date(),
       });
-      return null;
+      return ok(surveyResult);
     } catch (error) {
       return serverError(error);
     }
