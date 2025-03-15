@@ -8,7 +8,6 @@ export const adaptMiddleware = (middleware: Middleware) => {
     };
     const httpResponse = await middleware.handle(httpRequest);
 
-    console.log('httpResponse middleware: ', httpResponse);
     if (httpResponse.statusCode === 200) {
       Object.assign(req, httpResponse.body); //vamos colocar dentro do request do express tudo que o nosso middleware retornou.
       next();

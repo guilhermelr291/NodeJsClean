@@ -29,8 +29,7 @@ export class SurveyMongoRepository
     const survey = await surveyCollection.findOne({
       _id,
     });
-    if (!survey) return null;
 
-    return MongoHelper.map(survey);
+    return survey && MongoHelper.map(survey);
   }
 }
