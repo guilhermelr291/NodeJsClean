@@ -135,4 +135,20 @@ describe('SaveSurveyResult Controller', () => {
 
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('answer')));
   });
+
+  test('Should call SaveSurveyResult with correct values', async () => {
+    const { sut, saveSurveyResultStub } = makeSut();
+    const saveSpy = jest.spyOn(saveSurveyResultStub, 'save');
+
+    const httpRequest = makeFakeHttpRequest();
+
+    await sut.handle(httpRequest);
+
+    expect(saveSpy).toHaveBeenLastCalledWith({
+      surveyId: 'any_survey_id',
+      accountId: 'any_account_id',
+      date: new Date(),
+      answer: 'any_answer',
+    });
+  });
 });
