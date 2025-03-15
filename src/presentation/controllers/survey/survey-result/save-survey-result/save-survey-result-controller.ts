@@ -6,6 +6,7 @@ import {
   LoadSurveyById,
   SaveSurveyResult,
 } from './save-survey-result-controller-protocols';
+import { InvalidParamError } from '@/presentation/errors';
 
 export class SaveSurveyResultController implements Controller {
   constructor(
@@ -21,7 +22,7 @@ export class SaveSurveyResultController implements Controller {
       httpRequest.params.surveyId
     );
 
-    if (!survey) return forbidden(new Error());
+    if (!survey) return forbidden(new InvalidParamError('surveyId'));
 
     await this.saveSurveyResult.save(httpRequest.body);
     return null;
