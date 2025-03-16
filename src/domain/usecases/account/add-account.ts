@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { AccountModel } from '../models/account';
+import { AccountModel } from '@/domain/models/account';
 
 export type AddAccountModel = {
   name: string;

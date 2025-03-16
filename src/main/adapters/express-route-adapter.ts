@@ -8,6 +8,8 @@ export const adaptRoute = (controller: Controller) => {
     const httpRequest: HttpRequest = {
       body: req.body, //no nosso controller estamos pegando so o body,
       //então mapeamos só ele aqui.
+      params: req.params,
+      accountId: req.accountId,
     };
     const httpResponse = await controller.handle(httpRequest);
 

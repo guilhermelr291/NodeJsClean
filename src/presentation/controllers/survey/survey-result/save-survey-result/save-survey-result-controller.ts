@@ -11,6 +11,7 @@ import {
   SaveSurveyResult,
 } from './save-survey-result-controller-protocols';
 import { InvalidParamError } from '@/presentation/errors';
+import { ObjectId } from 'mongodb';
 
 export class SaveSurveyResultController implements Controller {
   constructor(
@@ -27,7 +28,9 @@ export class SaveSurveyResultController implements Controller {
       const { answer } = httpRequest.body;
       const { accountId } = httpRequest;
 
-      const survey = await this.loadSurveyById.loadById(surveyId);
+      const survey = await this.loadSurveyById.loadById(
+        ObjectId.createFromHexString(surveyId)
+      );
 
       if (survey) {
         const answers = survey.answers.map(a => a.answer);
