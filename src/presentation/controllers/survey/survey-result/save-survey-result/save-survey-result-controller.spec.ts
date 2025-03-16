@@ -17,7 +17,7 @@ import {
 import { InvalidParamError } from '@/presentation/errors';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
-  params: { surveyId: 'any_survey_id' },
+  params: { surveyId: '67d7123f00de50a4e7ebefec' },
   body: {
     answer: 'any_answer',
     date: new Date(),
@@ -97,7 +97,9 @@ describe('SaveSurveyResult Controller', () => {
 
     await sut.handle(httpRequest);
 
-    expect(loadByIdSpy).toHaveBeenCalledWith(httpRequest.params.surveyId);
+    expect(loadByIdSpy).toHaveBeenCalledWith(
+      ObjectId.createFromHexString(httpRequest.params.surveyId)
+    );
   });
 
   test('Should return 403 if LoadSurveyById returns null', async () => {
@@ -128,7 +130,7 @@ describe('SaveSurveyResult Controller', () => {
     const { sut } = makeSut();
 
     const httpResponse = await sut.handle({
-      params: { surveyId: 'any_survey_id' },
+      params: { surveyId: '67d7123f00de50a4e7ebefec' },
       body: {
         answer: 'wrong_answer',
       },
@@ -146,7 +148,7 @@ describe('SaveSurveyResult Controller', () => {
     await sut.handle(httpRequest);
 
     expect(saveSpy).toHaveBeenLastCalledWith({
-      surveyId: 'any_survey_id',
+      surveyId: '67d7123f00de50a4e7ebefec',
       accountId: 'any_account_id',
       date: new Date(),
       answer: 'any_answer',
