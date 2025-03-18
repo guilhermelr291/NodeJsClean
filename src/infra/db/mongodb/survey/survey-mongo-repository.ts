@@ -1,5 +1,5 @@
 import {
-  AddSurveyModel,
+  AddSurveyParams,
   AddSurveyRepository,
 } from '@/data/usecases/survey/add-survey/db-add-survey-protocols';
 import {
@@ -13,7 +13,7 @@ import { ObjectId } from 'mongodb';
 export class SurveyMongoRepository
   implements AddSurveyRepository, LoadSurveysRepository, LoadSurveyById
 {
-  async add(surveyData: AddSurveyModel): Promise<void> {
+  async add(surveyData: AddSurveyParams): Promise<void> {
     const surveyCollection = await MongoHelper.getCollection('surveys');
 
     await surveyCollection.insertOne(surveyData);

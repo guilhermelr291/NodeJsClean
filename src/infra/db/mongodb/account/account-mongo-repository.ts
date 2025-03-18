@@ -3,7 +3,7 @@ import { AddAccountRepository } from '@/data/protocols/db/account/add-account-re
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository';
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository';
 import { AccountModel } from '@/domain/models/account';
-import { AddAccountModel } from '@/domain/usecases/account/add-account';
+import { AddAccountParams } from '@/domain/usecases/account/add-account';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { LoadAccountByToken } from '@/domain/usecases/account/load-account-by-token';
 
@@ -14,7 +14,7 @@ export class AccountMongoRepository
     UpdateAccessTokenRepository,
     LoadAccountByToken
 {
-  async add(accountData: AddAccountModel): Promise<AccountModel> {
+  async add(accountData: AddAccountParams): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts');
     const result = await accountCollection.insertOne(accountData); //um _id é inserido aqui, antes da inserção.
     delete accountData._id;

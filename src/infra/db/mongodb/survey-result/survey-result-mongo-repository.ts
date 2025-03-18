@@ -4,11 +4,11 @@ import { MongoHelper } from '../helpers/mongo-helper';
 import { ObjectId } from 'mongodb';
 import {
   SaveSurveyResult,
-  SaveSurveyResultModel,
+  SaveSurveyResulParams,
 } from '@/domain/usecases/survey-result/save-survey-result';
 
 export class SurveyResultMongoRepository implements SaveSurveyResult {
-  async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+  async save(data: SaveSurveyResulParams): Promise<SurveyResultModel> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults'
     );

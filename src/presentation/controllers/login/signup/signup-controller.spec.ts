@@ -6,13 +6,13 @@ import {
 import { SignUpController } from './signup-controller';
 import {
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
   HttpRequest,
   Validation,
 } from './signup-controller-protocols';
 import {
   AddAccount,
-  AddAccountModel,
+  AddAccountParams,
 } from '@/domain/usecases/account/add-account';
 import { AccountModel } from '@/domain/models/account';
 import {
@@ -24,7 +24,7 @@ import {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return 'any_token';
     }
   }
@@ -42,8 +42,8 @@ const makeValidation = (): Validation => {
 };
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(account: AddAccountModel): Promise<AccountModel> {
-      //estamos usando o AccountModel somente no retorno pois nele temos também o id. Se usarmos no lugar do AddAccountModel, o campo id ficaria em branco e não é interessante. Fora isso, teríamos que ter o campo id como opcional, o que n é opcional no nosso retorno.
+    async add(account: AddAccountParams): Promise<AccountModel> {
+      //estamos usando o AccountModel somente no retorno pois nele temos também o id. Se usarmos no lugar do AddAccountParams, o campo id ficaria em branco e não é interessante. Fora isso, teríamos que ter o campo id como opcional, o que n é opcional no nosso retorno.
 
       return new Promise(resolve => resolve(makeFakeAccount()));
     }
