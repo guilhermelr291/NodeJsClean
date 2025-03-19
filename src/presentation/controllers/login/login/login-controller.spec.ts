@@ -8,21 +8,12 @@ import {
 import { LoginController } from './login-controller';
 import {
   Authentication,
-  AuthenticationParams,
   HttpRequest,
   Validation,
 } from './login-controller-protocols';
 import { MissingParamError, ServerError } from '@/presentation/errors';
-
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationParams): Promise<string> {
-      return 'any_token';
-    }
-  }
-
-  return new AuthenticationStub();
-};
+import { mockValidation } from '@/validation/test/mock-validation';
+import { mockAuthentication } from '@/presentation/test';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -31,23 +22,14 @@ const makeFakeRequest = (): HttpRequest => ({
   },
 });
 
-const makeValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(input: any): Error | null {
-      return null; //se n retornarmos erro nenhum, é sucesso. podemos usar NULL então.
-    }
-  }
-  return new ValidationStub();
-};
-
 type SutTypes = {
   sut: LoginController;
   authenticationStub: Authentication;
   validationStub: Validation;
 };
 const makeSut = (): SutTypes => {
-  const authenticationStub = makeAuthentication();
-  const validationStub = makeValidation();
+  const authenticationStub = mockAuthentication();
+  const validationStub = mockValidation();
   const sut = new LoginController(authenticationStub, validationStub);
   return { sut, validationStub, authenticationStub };
 };

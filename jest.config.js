@@ -7,7 +7,14 @@
 const config = {
   roots: ['<rootDir>/src'],
   collectCoverage: true,
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/*protocols.ts',
+    '!<rootDir>/src/**/*server.ts',
+    '!<rootDir>/src/**/*.d.ts',
+    '!<rootDir>/src/**/*env.ts',
+    '!<rootDir>/src/**/*app.ts',
+  ],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
   preset: '@shelf/jest-mongodb',

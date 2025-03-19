@@ -1,23 +1,15 @@
+import { mockAccountModel, mockAddAccountParams } from '@/domain/test';
 import { DbAddAccount } from './db-add-account';
 import {
   AccountModel,
-  AddAccountParams,
   AddAccountRepository,
   Hasher,
   LoadAccountByEmailRepository,
 } from './db-add-account-protocols';
+import { mockHasher } from '@/data/test';
+import { mockAddAccountRepository } from '@/data/test/mock-db-account';
 
-const makeHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash(value: string): Promise<string> {
-      return new Promise(resolve => resolve('hashed_password'));
-    }
-  }
-
-  return new HasherStub(); //temos que passar no construtor do dbAddAccount
-};
-
-const makeLoadAccountByEmailRepository = () => {
+const mockLoadAccountByEmailRepository = () => {
   class LoadAccountByEmailRepositoryStub
     implements LoadAccountByEmailRepository
   {
@@ -28,29 +20,6 @@ const makeLoadAccountByEmailRepository = () => {
   return new LoadAccountByEmailRepositoryStub();
 };
 
-const makeAddAccountRepository = (): AddAccountRepository => {
-  class addAccountRepositoryStub implements AddAccountRepository {
-    async add(accountData: AddAccountParams): Promise<AccountModel> {
-      return new Promise(resolve => resolve(makeFakeAccount()));
-    }
-  }
-
-  return new addAccountRepositoryStub(); //temos que passar no construtor do dbAddAccount
-};
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'hashed_password',
-});
-
-const makeFakeAccountData = (): AddAccountParams => ({
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password',
-});
-
 type SutTypes = {
   sut: DbAddAccount;
   hasherStub: Hasher;
@@ -58,9 +27,9 @@ type SutTypes = {
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
 };
 const makeSut = (): SutTypes => {
-  const hasherStub = makeHasher();
-  const addAccountRepositoryStub = makeAddAccountRepository();
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+  const hasherStub = mockHasher();
+  const addAccountRepositoryStub = mockAddAccountRepository();
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository();
   const sut = new DbAddAccount(
     hasherStub,
     addAccountRepositoryStub,
@@ -80,8 +49,8 @@ describe('DbAddAccount Usecase', () => {
     const { sut, hasherStub } = makeSut();
     const hashSpy = jest.spyOn(hasherStub, 'hash');
 
-    await sut.add(makeFakeAccountData());
-    expect(hashSpy).toHaveBeenCalledWith('valid_password');
+    await sut.add(mockAddAccountParams());
+    expect(hashSpy).toHaveBeenCalledWith('any_password');
   });
 
   test('Should throw if Hasher throws', async () => {
@@ -93,19 +62,19 @@ describe('DbAddAccount Usecase', () => {
         new Promise((resolve, reject) => reject(new Error()))
       );
 
-    const promise = sut.add(makeFakeAccountData()); //temos que obter o retorno sem o await, pegarmos a promise e, a partir dela, esperarmos o reject.
+    const promise = sut.add(mockAddAccountParams()); //temos que obter o retorno sem o await, pegarmos a promise e, a partir dela, esperarmos o reject.
     await expect(promise).rejects.toThrow(); //por que "perder tempo" criando um teste desse? Simplesmente, para caso alguém coloque um try catch no método, n corrermos o risco da exceção não ser lançada e não tratada pelo controller.
   });
 
   test('Should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut();
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
-    //IMPORTANT lembrar que ja recebemos esses dados validados do nosso controller. (makeFakeAccountData())
+    //IMPORTANT lembrar que ja recebemos esses dados anyados do nosso controller. (mockAddAccountParams())
 
-    await sut.add(makeFakeAccountData());
+    await sut.add(mockAddAccountParams());
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
+      name: 'any_name',
+      email: 'any_email@mail.com',
       password: 'hashed_password',
     });
   });
@@ -119,7 +88,7 @@ describe('DbAddAccount Usecase', () => {
         new Promise((resolve, reject) => reject(new Error()))
       );
 
-    const promise = sut.add(makeFakeAccountData()); //temos que obter o retorno sem o await, pegarmos a promise e, a partir dela, esperarmos o reject.
+    const promise = sut.add(mockAddAccountParams()); //temos que obter o retorno sem o await, pegarmos a promise e, a partir dela, esperarmos o reject.
     await expect(promise).rejects.toThrow(); //por que "perder tempo" criando um teste desse? Simplesmente, para caso alguém coloque um try catch no método, n corrermos o risco da exceção não ser lançada e não tratada pelo controller.
   });
 
@@ -127,17 +96,17 @@ describe('DbAddAccount Usecase', () => {
     const { sut } = makeSut();
     //IMPORTANT Lembrete: caso de sucesso a gente não mocka! o default dos testes deve ser passar. mocks apenas para retornar erros ou valores que causem erros.
 
-    const account = await sut.add(makeFakeAccountData());
-    expect(account).toEqual(makeFakeAccount());
+    const account = await sut.add(mockAddAccountParams());
+    expect(account).toEqual(mockAccountModel());
   });
 
   test('Should return null if LoadAccountByEmailRepository not returns null', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     jest
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
-      .mockReturnValueOnce(new Promise(resolve => resolve(makeFakeAccount())));
+      .mockReturnValueOnce(new Promise(resolve => resolve(mockAccountModel())));
 
-    const account = await sut.add(makeFakeAccountData());
+    const account = await sut.add(mockAddAccountParams());
     expect(account).toBeNull();
   });
 
@@ -145,8 +114,8 @@ describe('DbAddAccount Usecase', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
 
-    await sut.add(makeFakeAccount());
+    await sut.add(mockAccountModel());
 
-    expect(loadSpy).toHaveBeenCalledWith('valid_email@mail.com');
+    expect(loadSpy).toHaveBeenCalledWith('any_email@mail.com');
   });
 });

@@ -2,15 +2,7 @@ import { InvalidParamError } from '@/presentation/errors';
 
 import { EmailValidation } from './email-validation';
 import { EmailValidator } from './protocols/email-validator';
-
-const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid(email: string): boolean {
-      return true; //IMPORTANT lembrar de sempre retornar algo que nao interrompa o fluxo da execução. Se precisarmos testar um caso negativo, que de erro, basta usarmos um mock e pronto.
-    }
-  }
-  return new EmailValidatorStub();
-};
+import { mockEmailValidator } from '../test';
 
 type SutTypes = {
   sut: EmailValidation;
@@ -18,7 +10,7 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidator();
+  const emailValidatorStub = mockEmailValidator();
 
   const sut = new EmailValidation('email', emailValidatorStub);
   return { sut, emailValidatorStub };

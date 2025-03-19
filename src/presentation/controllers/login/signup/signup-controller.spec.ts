@@ -6,15 +6,11 @@ import {
 import { SignUpController } from './signup-controller';
 import {
   Authentication,
-  AuthenticationParams,
   HttpRequest,
   Validation,
 } from './signup-controller-protocols';
-import {
-  AddAccount,
-  AddAccountParams,
-} from '@/domain/usecases/account/add-account';
-import { AccountModel } from '@/domain/models/account';
+import { AddAccount } from '@/domain/usecases/account/add-account';
+
 import {
   badRequest,
   forbidden,
@@ -22,42 +18,9 @@ import {
   serverError,
 } from '@/presentation/helpers/http/http-helper';
 
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationParams): Promise<string> {
-      return 'any_token';
-    }
-  }
+import { mockValidation } from '@/validation/test/mock-validation';
 
-  return new AuthenticationStub();
-};
-
-const makeValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(input: any): Error | null {
-      return null; //se n retornarmos erro nenhum, é sucesso. podemos usar NULL então.
-    }
-  }
-  return new ValidationStub();
-};
-const makeAddAccount = (): AddAccount => {
-  class AddAccountStub implements AddAccount {
-    async add(account: AddAccountParams): Promise<AccountModel> {
-      //estamos usando o AccountModel somente no retorno pois nele temos também o id. Se usarmos no lugar do AddAccountParams, o campo id ficaria em branco e não é interessante. Fora isso, teríamos que ter o campo id como opcional, o que n é opcional no nosso retorno.
-
-      return new Promise(resolve => resolve(makeFakeAccount()));
-    }
-  }
-
-  return new AddAccountStub();
-};
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password',
-});
+import { mockAddAccount, mockAuthentication } from '@/presentation/test';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -76,9 +39,9 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const addAccountStub = makeAddAccount();
-  const validationStub = makeValidation();
-  const authenticationStub = makeAuthentication();
+  const addAccountStub = mockAddAccount();
+  const validationStub = mockValidation();
+  const authenticationStub = mockAuthentication();
   const sut = new SignUpController(
     addAccountStub,
     validationStub,
