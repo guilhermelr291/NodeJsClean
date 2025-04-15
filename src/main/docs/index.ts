@@ -1,4 +1,3 @@
-import { sign } from 'crypto';
 import {
   badRequest,
   forbidden,
@@ -9,6 +8,7 @@ import {
 import { loginPath, signUpPath, surveyPath } from './paths';
 import {
   accountSchema,
+  addSurveyParamsSchema,
   apiKeyAuthSchema,
   errorSchema,
   loginParamsSchema,
@@ -65,6 +65,7 @@ export default {
       survey: surveySchema,
       surveys: surveysSchema,
       signUpParams: signUpParamsSchema,
+      addSurveyParams: addSurveyParamsSchema,
     },
   },
 };
