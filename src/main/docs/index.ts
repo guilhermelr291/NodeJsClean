@@ -1,3 +1,4 @@
+import { sign } from 'crypto';
 import {
   badRequest,
   forbidden,
@@ -5,12 +6,13 @@ import {
   serverError,
   unauthorized,
 } from './components';
-import { loginPath, surveyPath } from './paths';
+import { loginPath, signUpPath, surveyPath } from './paths';
 import {
   accountSchema,
   apiKeyAuthSchema,
   errorSchema,
   loginParamsSchema,
+  signUpParamsSchema,
   surveyAnswerSchema,
   surveySchema,
   surveysSchema,
@@ -43,6 +45,7 @@ export default {
   ],
   paths: {
     '/login': loginPath,
+    '/signup': signUpPath,
     '/surveys': surveyPath,
   },
   components: {
@@ -61,6 +64,7 @@ export default {
       surveyAnswer: surveyAnswerSchema,
       survey: surveySchema,
       surveys: surveysSchema,
+      signUpParams: signUpParamsSchema,
     },
   },
 };
