@@ -74,12 +74,3 @@ O projeto utiliza **ESLint**, **Husky** e **Lint-Staged** para manter o código 
 - **Husky**: executa scripts antes de commits/pushes.
 - **Lint-Staged**: aplica ESLint e testes apenas aos arquivos alterados.
 
-Trecho de configuração automática (`lint-staged` no `package.json`):
-
-```json
-"lint-staged": {
-  "*.ts": [
-    "eslint 'src/**' --fix",
-    "npm run test:staged"
-  ]
-}
